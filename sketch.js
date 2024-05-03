@@ -1,10 +1,8 @@
 let startButton;
 let viewCharactersButton;
 let scene = -1;
-let frogX, frogY, frogX2, frogY2;
-let frogAngle;
+let player1X, player1Y, player2X, player2Y;
 let keys = {};
-let show = -1;
 let frogExist = true;
 let frog2Exist = true;
 let bgImage;
@@ -15,6 +13,11 @@ let knife2X = -1000;
 let knife2Y = -1000;
 let ifKnifeAni = false;
 let ifKnifeAni2 = false;
+let direction1, direction2;
+let player1_up_Ani, player1_down_Ani, player1_left_Ani, player1_right_Ani, player1_stay_Ani;
+let player2_up_Ani, player2_down_Ani, player2_left_Ani, player2_right_Ani, player2_stay_Ani;
+let changeDirection = true;
+let changeDirection2 = true;
 
 function preload() {
     knifeImage = loadImage("knife.png", img => {
@@ -30,10 +33,10 @@ function setup() {
   createCanvas(800, 800);
   background(bgImage);
 	frogAngle = 0;
-  frogX = width/2;
-  frogY = height/2;
-  frogX2 = 100;
-  frogY2 = 0;
+  player1X = 200;
+  player1Y = 400;
+  player2X = 600;
+  player2Y = 400;
 	
   startButton = createButton('Start Game');
   startButton.position(760, 400);
@@ -46,6 +49,25 @@ function setup() {
   viewCharactersButton.mousePressed(viewCharacters);
 	knifeAni = loadAnimation("knife_1.png", "knife_2.png", "knife_3.png",); 
 	knifeAni.frameDelay = 5;
+  player1_up_Ani = loadAnimation('melon_up_1.png','melon_up_2.png','melon_up_3.png');
+  player1_up_Ani.frameDelay = 10;
+	player1_stay_Ani = loadAnimation('melon_stay.png');
+	player1_down_Ani = loadAnimation('melon_down_1.png','melon_down_2.png','melon_down_3.png');
+  player1_down_Ani.frameDelay = 10;
+	player1_left_Ani = loadAnimation('melon_left_1.png','melon_left_2.png');
+  player1_left_Ani.frameDelay = 10;
+	player1_right_Ani = loadAnimation('melon_right_1.png','melon_right_2.png','melon_right_3.png');
+  player1_right_Ani.frameDelay = 10;
+	
+	player2_stay_Ani = loadAnimation('banana_down_1.png');
+	player2_up_Ani = loadAnimation('banana_up_1.png','banana_up_2.png','banana_up_3.png');
+  player2_up_Ani.frameDelay = 10;
+	player2_down_Ani = loadAnimation('banana_down_1.png','banana_down_2.png','banana_down_3.png');
+  player2_down_Ani.frameDelay = 10;
+	player2_left_Ani = loadAnimation('banana_left_1.png','banana_left_2.png');
+  player2_left_Ani.frameDelay = 10;
+	player2_right_Ani = loadAnimation('banana_right_1.png','banana_right_2.png','banana_right_3.png');
+  player2_right_Ani.frameDelay = 10;
 }
 
 function draw() {
@@ -67,7 +89,18 @@ function draw() {
 			scale(0.3);
 			animation(knifeAni, 0, 0);
 			pop();
-			knifeY -= 10;
+			if(direction1 == 0){
+				knifeY -= 10;
+			}
+			else if(direction1 == 1){
+				knifeY += 10;
+			}
+			else if(direction1 == 2){
+				knifeX -= 10;
+			}
+			else{
+				knifeX += 10;
+			}
 		}
 		
 		if(ifKnifeAni2 == true){
@@ -76,76 +109,164 @@ function draw() {
 			scale(0.3);
 			animation(knifeAni, 0, 0);
 			pop();
-			knife2Y += 10;
+			if(direction2 == 0){
+				knife2Y -= 10;
+			}
+			else if(direction2 == 1){
+				knife2Y += 10;
+			}
+			else if(direction2 == 2){
+				knife2X -= 10;
+			}
+			else{
+				knife2X += 10;
+			}
 		}
 		
 		if(knifeY <= 0 || knifeY >= 800 || knifeX <= 0 || knifeX >= 800){
 			ifKnifeAni = false;
+			changeDirection = true;
 		}
 		if(knife2Y <= 0 || knife2Y >= 800 || knife2X <= 0 || knife2X >= 800){
 			ifKnifeAni2 = false;
+			changeDirection2 = true;
 		}
 		
     if (keys['e'] || keys['E']) {
-			knifeX = frogX;
-			knifeY = frogY;
-			ifKnifeAni = true;
+			if(changeDirection == true){
+				knifeX = player1X;
+				knifeY = player1Y;
+				ifKnifeAni = true;
+				changeDirection = false;
+			}
+			
   	}
 		if (keys['SHIFT']) {
-			knife2X = frogX2;
-			knife2Y = frogY2;
-			ifKnifeAni2 = true;
+			if(changeDirection2 == true){
+				knife2X = player2X;
+				knife2Y = player2Y;
+				ifKnifeAni2 = true;
+				changeDirection2 = false;
+			}
   	}
 		if (keys['w'] || keys['W']) {
-			show = 0;
-    	frogY -= 10;
+      push();
+			translate(player1X, player1Y);
+			scale(0.4);
+			animation(player1_up_Ani, 0, 0);
+			pop();
+    	player1Y -= 10;
+			if(changeDirection == true){
+				direction1 = 0;
+				changeDirection = false;
+			}
   	}
-  	if (keys['s'] || keys['S']) {
-    	frogY += 10;
+  	else if (keys['s'] || keys['S']) {
+			push();
+			translate(player1X, player1Y);
+			scale(0.4);
+			animation(player1_down_Ani, 0, 0);
+			pop();
+    	player1Y += 10;
+			if(changeDirection == true){
+				direction1 = 1;
+				changeDirection = false;
+			}
   	}
-  	if (keys['a'] || keys['A']) {
-    	frogX -= 10;
+  	else if (keys['a'] || keys['A']) {
+			push();
+			translate(player1X, player1Y);
+			scale(0.4);
+			animation(player1_left_Ani, 0, 0);
+			pop();
+    	player1X -= 10;
+			if(changeDirection == true){
+				direction1 = 2;
+				changeDirection = false;
+			}
   	}
-  	if (keys['d'] || keys['D']) {
-    	frogX += 10;
+  	else if (keys['d'] || keys['D']) {
+			push();
+			translate(player1X, player1Y);
+			scale(0.4);
+			animation(player1_right_Ani, 0, 0);
+			pop();
+    	player1X += 10;
+			if(changeDirection == true){
+				direction1 = 3;
+				changeDirection = false;
+			}
   	}
+		else{
+			push();
+			translate(player1X, player1Y);
+			scale(0.4);
+			animation(player1_stay_Ani, 0, 0);
+			pop();
+		}
   	if (keys['ArrowUp']) {
-    	frogY2 -= 10;
+    	push();
+			translate(player2X, player2Y);
+			scale(0.5);
+			animation(player2_up_Ani, 0, 0);
+			pop();
+    	player2Y -= 10;
+			if(changeDirection2 == true){
+				direction2 = 0;
+				changeDirection2 = false;
+			}
   	}
-  	if (keys['ArrowDown']) {
-    	frogY2 += 10;
+  	else if (keys['ArrowDown']) {
+    	push();
+			translate(player2X, player2Y);
+			scale(0.5);
+			animation(player2_down_Ani, 0, 0);
+			pop();
+    	player2Y += 10;
+			if(changeDirection2 == true){
+				direction2 = 1;
+				changeDirection2 = false;
+			}
   	}
-  	if (keys['ArrowLeft']) {
-    	frogX2 -= 10;
+  	else if (keys['ArrowLeft']) {
+    	push();
+			translate(player2X, player2Y);
+			scale(0.5);
+			animation(player2_left_Ani, 0, 0);
+			pop();
+    	player2X -= 10;
+			if(changeDirection2 == true){
+				direction2 = 2;
+				changeDirection2 = false;
+			}
   	}
-  	if (keys['ArrowRight']) {
-    	frogX2 += 10;
+  	else if (keys['ArrowRight']) {
+    	push();
+			translate(player2X, player2Y);
+			scale(0.5);
+			animation(player2_right_Ani, 0, 0);
+			pop();
+    	player2X += 10;
+			if(changeDirection2 == true){
+				direction2 = 3;
+				changeDirection2 = false;
+			}
   	}
+		else{
+			push();
+			translate(player2X, player2Y);
+			scale(0.5);
+			animation(player2_stay_Ani, 0, 0);
+			pop();
+		}
 		
-		if(checkCollision(knifeX, knifeY, frogX2, frogY2) == true){
+		if(checkCollision(knifeX, knifeY, player2X, player2Y) == true){
 			frogExist = false;
 		}
-		if(checkCollision(knife2X, knife2Y, frogX, frogY) == true){
+		if(checkCollision(knife2X, knife2Y, player1X, player1Y) == true){
 			frog2Exist = false;
 		}
 
-		if(frog2Exist == true){
-			push();
-    		translate(frogX, frogY);
-    		scale(5, 5);
-    		translate(-10, -7);
-    		drawfrog();
-  		pop();
-		}
-		
-		if(frogExist == true){
-			push();
-    		translate(frogX2, frogY2);
-    		scale(5, 5);
-				translate(-10, -7);
-    		drawfrog();
-  		pop();
-		}
 		}
 
 }
@@ -165,56 +286,9 @@ function keyReleased() {
 }
 
 
-function drawfrog() {
-  noStroke();
-  fill(32, 219, 36);
-  beginShape();
-  vertex(9, 1);
-  vertex(13, 1);
-  vertex(14, 4);
-  vertex(17, 6);
-  vertex(18, 5);
-  vertex(18, 1);
-  vertex(21, 3);
-  vertex(19, 4);
-  vertex(19, 8);
-  vertex(16, 7);
-  vertex(19, 9);
-  vertex(20, 10);
-  vertex(21, 14);
-  vertex(18, 15);
-  vertex(18, 11);
-  vertex(15, 10);
-  vertex(13, 13);
-  vertex(8, 13);
-  vertex(7, 11);
-  vertex(5, 10);
-  vertex(4, 15);
-  vertex(1, 13);
-  vertex(3, 11);
-  vertex(4, 8);
-  vertex(6, 9);
-  vertex(6, 7);
-  vertex(3, 7);
-  vertex(3, 4);
-  vertex(1, 3);
-  vertex(5, 1);
-  vertex(4, 6);
-  vertex(8, 4);
-  vertex(9, 1);
-  endShape();
-  fill(248, 235, 21);
-  ellipse(11, 7, 2, 2);
-  fill(253, 3, 217);
-  ellipse(7, 3, 2, 2);
-  ellipse(15, 3, 2, 2);
-}
-
-
 function startGame() {
   console.log("Game started!");
 	scene = 0;
-
 }
 
 function viewCharacters() {
@@ -222,16 +296,16 @@ function viewCharacters() {
 
 }
 
-function checkCollision(knifeX, knifeY, frogX, frogY) {
+function checkCollision(knifeX, knifeY, player1X, player1Y) {
   let knifeLeft = knifeX - 50;
   let knifeRight = knifeX + 50;
   let knifeTop = knifeY - 50; 
   let knifeBottom = knifeY + 50;
 
-  let frogLeft = frogX - 50;
-  let frogRight = frogX + 50;
-  let frogTop = frogY - 50;
-  let frogBottom = frogY + 50;
+  let frogLeft = player1X - 50;
+  let frogRight = player1X + 50;
+  let frogTop = player1Y - 50;
+  let frogBottom = player1Y + 50;
 
   if (knifeRight >= frogLeft && knifeLeft <= frogRight &&
       knifeBottom >= frogTop && knifeTop <= frogBottom) {
@@ -239,4 +313,24 @@ function checkCollision(knifeX, knifeY, frogX, frogY) {
   } else {
     return false;
   }
+}
+
+function launchKnife(direction){
+	push();
+	translate(knifeX, knifeY);
+	scale(0.3);
+	animation(knifeAni, 0, 0);
+	pop();
+	if(direction == 0){
+		knifeY -= 10;
+	}
+	else if(direction == 1){
+		knifeY += 10;
+	}
+	else if(direction == 2){
+		knifeX -= 10;
+	}
+	else{
+		knifeX += 10;
+	}
 }
