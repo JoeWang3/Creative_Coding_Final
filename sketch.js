@@ -6,7 +6,8 @@ let keys = {};
 let frogExist = true;
 let frog2Exist = true;
 let bgImage;
-let knifeImage;
+let knifeImage, map_1, ice;
+let one_blood, two_blood, three_blood, player1_win, player2_win;
 let knifeX = -1000;
 let knifeY = -1000;
 let knife2X = -1000;
@@ -18,6 +19,8 @@ let player1_up_Ani, player1_down_Ani, player1_left_Ani, player1_right_Ani, playe
 let player2_up_Ani, player2_down_Ani, player2_left_Ani, player2_right_Ani, player2_stay_Ani;
 let changeDirection = true;
 let changeDirection2 = true;
+let player1_blood = 3;
+let player2_blood = 3;
 
 function preload() {
     knifeImage = loadImage("knife.png", img => {
@@ -26,7 +29,24 @@ function preload() {
 		bgImage = loadImage("homePage.png", img => {
     img.resize(800, 800);
   });
-
+		one_blood = loadImage("one_blood.png", img => {
+    	img.resize(100, 100);
+  	});
+		two_blood = loadImage("two_blood.png", img => {
+    	img.resize(100, 100);
+  	});
+		three_blood = loadImage("three_blood.png", img => {
+    	img.resize(100, 100);
+  	});
+	player1_win = loadImage("player1_win.png")
+	player2_win = loadImage("player2_win.png")
+	map_1 = loadImage("map_1.png", img => {
+    img.resize(800, 800);
+  });
+	ice = loadImage("ice.png", img => {
+    img.resize(100, 100);
+  });
+	
 }
 
 function setup() {
@@ -79,9 +99,68 @@ function draw() {
 	}
 	else if(scene == 0){
 		clear();
-		background(0, 255, 255); 
+		background(map_1);
 		startButton.hide();
     viewCharactersButton.hide();
+		
+		image(ice, 300,300);
+		image(ice, 300,400);
+		image(ice, 300,500);
+		
+		// image(ice, 500,100);
+		// image(ice, 500,200);
+		
+		
+		if(player1X <= 0){
+			player1X = 0;
+		}
+		if(player1X >= 800){
+			player1X = 800;
+		}
+		if(player1Y <= 0){
+			player1Y = 0;
+		}
+		if(player1Y >= 800){
+			player1Y = 800;
+		}
+		if(player2X <= 0){
+			player2X = 0;
+		}
+		if(player2X >= 800){
+			player2X = 800;
+		}
+		if(player2Y <= 0){
+			player2Y = 0;
+		}
+		if(player2Y >= 800){
+			player2Y = 800;
+		}
+		
+		
+		// draw the blood of the two players
+		if(player1_blood == 3){
+			image(three_blood, player1X-50, player1Y-110);
+		}
+		else if (player1_blood == 2){
+			image(two_blood, player1X-50, player1Y-110);
+		}
+		else if(player1_blood == 1){
+			image(one_blood, player1X-50, player1Y-110);
+		}else{
+			scene = 1; // player2 wins
+		}
+		
+		if(player2_blood == 3){
+			image(three_blood, player2X-50, player2Y-110);
+		}
+		else if (player2_blood == 2){
+			image(two_blood, player2X-50, player2Y-110);
+		}else if(player2_blood == 1){
+			image(one_blood, player2X-50, player2Y-110);
+		}
+		else{
+			scene = 2; // player1 wins
+		}
 		
 		if(ifKnifeAni == true){
 			push();
@@ -261,13 +340,47 @@ function draw() {
 		}
 		
 		if(checkCollision(knifeX, knifeY, player2X, player2Y) == true){
-			frogExist = false;
+			player2_blood -= 1;
+			changeDirection = true;
+			ifKnifeAni = false;
+			knifeX = -1000;
+			knifeY = -1000;
 		}
 		if(checkCollision(knife2X, knife2Y, player1X, player1Y) == true){
-			frog2Exist = false;
+			player1_blood -= 1;
+			changeDirection2 = true;
+			ifKnifeAni2 = false;
+			knife2X = -1000;
+			knife2Y = -1000;
+		}
+		if(checkCollision2(knife2X-50, knife2Y-50,100, 100, 300, 300, 100, 300) == true ){
+			changeDirection2 = true;
+			ifKnifeAni2 = false;
+			knife2X = -1000;
+			knife2Y = -1000;
+		}
+		
+		if(checkCollision2(knifeX-50, knifeY-50,100, 100, 300, 300, 100, 300) == true ){
+			changeDirection = true;
+			ifKnifeAni = false;
+			knifeX = -1000;
+			knifeY = -1000;
 		}
 
+		
 		}
+	else if(scene == 1){
+		clear();
+		background(player2_win); 
+		startButton.hide();
+    viewCharactersButton.hide();
+	}
+	else if(scene == 2){
+		clear();
+		background(player1_win); 
+		startButton.hide();
+    viewCharactersButton.hide();
+	}
 
 }
 
@@ -287,13 +400,11 @@ function keyReleased() {
 
 
 function startGame() {
-  console.log("Game started!");
 	scene = 0;
 }
 
 function viewCharacters() {
   console.log("Viewing characters");
-
 }
 
 function checkCollision(knifeX, knifeY, player1X, player1Y) {
@@ -315,22 +426,13 @@ function checkCollision(knifeX, knifeY, player1X, player1Y) {
   }
 }
 
-function launchKnife(direction){
-	push();
-	translate(knifeX, knifeY);
-	scale(0.3);
-	animation(knifeAni, 0, 0);
-	pop();
-	if(direction == 0){
-		knifeY -= 10;
-	}
-	else if(direction == 1){
-		knifeY += 10;
-	}
-	else if(direction == 2){
-		knifeX -= 10;
-	}
-	else{
-		knifeX += 10;
-	}
+function checkCollision2(x1, y1, w1, h1, x2, y2, w2, h2) {
+    if (x1 + w1 < x2) return false;
+
+    if (x1 > x2 + w2) return false;
+
+    if (y1 + h1 < y2) return false;
+
+    if (y1 > y2 + h2) return false;
+    return true;
 }
