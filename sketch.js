@@ -7,7 +7,7 @@ let frogExist = true;
 let frog2Exist = true;
 let bgImage;
 let knifeImage, map_1, ice;
-let one_blood, two_blood, three_blood, player1_win, player2_win;
+let one_blood, two_blood, three_blood, player1_win, player2_win, left_arrow, right_arrow, up_arrow, down_arrow;
 let knifeX = -1000;
 let knifeY = -1000;
 let knife2X = -1000;
@@ -21,8 +21,10 @@ let changeDirection = true;
 let changeDirection2 = true;
 let player1_blood = 3;
 let player2_blood = 3;
+let iceBreaking;
 
 function preload() {
+	iceBreaking = loadSound('iceBreaking.mp3');
     knifeImage = loadImage("knife.png", img => {
 			img.resize(200, 200);
 		}); 
@@ -46,6 +48,18 @@ function preload() {
 	ice = loadImage("ice.png", img => {
     img.resize(100, 100);
   });
+	left_arrow = loadImage("arrow_left.png", img => {
+    img.resize(50, 50);
+  });
+	right_arrow = loadImage("arrow_right.png", img => {
+    img.resize(50, 50);
+  });
+	up_arrow = loadImage("arrow_up.png", img => {
+    img.resize(50, 50);
+  });
+	down_arrow = loadImage("arrow_down.png", img => {
+    img.resize(50, 50);
+  });
 	
 }
 
@@ -57,6 +71,7 @@ function setup() {
   player1Y = 400;
   player2X = 600;
   player2Y = 400;
+	
 	
   startButton = createButton('Start Game');
   startButton.position(760, 400);
@@ -110,7 +125,7 @@ function draw() {
 		// image(ice, 500,100);
 		// image(ice, 500,200);
 		
-		
+		// Disable the character from running out of the screen 
 		if(player1X <= 0){
 			player1X = 0;
 		}
@@ -162,6 +177,33 @@ function draw() {
 			scene = 2; // player1 wins
 		}
 		
+		// draw a direction arrow on the top of the character to show the user where the knife will go
+		if(direction1 == 0){
+			image(up_arrow, player1X+50, player1Y-90);
+		}
+		else if(direction1 == 1){
+			image(down_arrow, player1X+50, player1Y-90);
+		}
+		else if(direction1 == 3){
+			image(right_arrow, player1X+50, player1Y-90);
+		}
+		else if(direction1 == 2){
+			image(left_arrow, player1X+50, player1Y-90);
+		}
+		if(direction2 == 0){
+			image(up_arrow, player2X+50, player2Y-90);
+		}
+		else if(direction2 == 1){
+			image(down_arrow, player2X+50, player2Y-90);
+		}
+		else if(direction2 == 3){
+			image(right_arrow, player2X+50, player2Y-90);
+		}
+		else if(direction2 == 2){
+			image(left_arrow, player2X+50, player2Y-90);
+		}
+
+		
 		if(ifKnifeAni == true){
 			push();
 			translate(knifeX, knifeY);
@@ -211,7 +253,7 @@ function draw() {
 			changeDirection2 = true;
 		}
 		
-    if (keys['e'] || keys['E']) {
+    if (keys['e']) {
 			if(changeDirection == true){
 				knifeX = player1X;
 				knifeY = player1Y;
@@ -220,7 +262,7 @@ function draw() {
 			}
 			
   	}
-		if (keys['SHIFT']) {
+		if (keys['/']) {
 			if(changeDirection2 == true){
 				knife2X = player2X;
 				knife2Y = player2Y;
@@ -358,6 +400,7 @@ function draw() {
 			ifKnifeAni2 = false;
 			knife2X = -1000;
 			knife2Y = -1000;
+			iceBreaking.play();
 		}
 		
 		if(checkCollision2(knifeX-50, knifeY-50,100, 100, 300, 300, 100, 300) == true ){
@@ -365,6 +408,7 @@ function draw() {
 			ifKnifeAni = false;
 			knifeX = -1000;
 			knifeY = -1000;
+			iceBreaking.play();
 		}
 
 		
