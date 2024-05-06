@@ -151,6 +151,10 @@ function draw() {
 			player2Y = 800;
 		}
 		
+		// Diasble the character from crossing the ice
+		
+		
+		
 		
 		// draw the blood of the two players
 		if(player1_blood == 3){
@@ -276,7 +280,12 @@ function draw() {
 			scale(0.4);
 			animation(player1_up_Ani, 0, 0);
 			pop();
-    	player1Y -= 10;
+    	if(player1X >= 260 && player1X <= 440 && player1Y >= 650 && player1Y - 10 <= 650){
+			player1Y = 650;
+			}
+			else{
+				player1Y -= 10;
+			}
 			if(changeDirection == true){
 				direction1 = 0;
 				changeDirection = false;
@@ -288,7 +297,12 @@ function draw() {
 			scale(0.4);
 			animation(player1_down_Ani, 0, 0);
 			pop();
-    	player1Y += 10;
+			if(player1X >= 260 && player1X <= 440 && player1Y <= 250 && player1Y + 10 >= 250){
+			player1Y = 250;
+			}
+			else{
+				player1Y += 10;
+			}
 			if(changeDirection == true){
 				direction1 = 1;
 				changeDirection = false;
@@ -300,7 +314,12 @@ function draw() {
 			scale(0.4);
 			animation(player1_left_Ani, 0, 0);
 			pop();
-    	player1X -= 10;
+    	if(player1X >= 450 && player1X - 10 <= 450 && player1Y <= 650 && player1Y >= 250){
+			player1X = 450;
+			}
+			else{
+				player1X -= 10;
+			}
 			if(changeDirection == true){
 				direction1 = 2;
 				changeDirection = false;
@@ -312,7 +331,12 @@ function draw() {
 			scale(0.4);
 			animation(player1_right_Ani, 0, 0);
 			pop();
-    	player1X += 10;
+			if(player1X <= 250 && player1X + 10 >= 250 && player1Y <= 630 && player1Y >= 270){
+			player1X = 250;
+			}
+			else{
+				player1X += 10;
+			}
 			if(changeDirection == true){
 				direction1 = 3;
 				changeDirection = false;
@@ -331,7 +355,12 @@ function draw() {
 			scale(0.5);
 			animation(player2_up_Ani, 0, 0);
 			pop();
-    	player2Y -= 10;
+    	if(player2X >= 260 && player2X <= 440 && player2Y >= 650 && player2Y - 10 <= 650){
+			player2Y = 650;
+			}
+			else{
+				player2Y -= 10;
+			}
 			if(changeDirection2 == true){
 				direction2 = 0;
 				changeDirection2 = false;
@@ -343,7 +372,12 @@ function draw() {
 			scale(0.5);
 			animation(player2_down_Ani, 0, 0);
 			pop();
-    	player2Y += 10;
+    	if(player2X >= 260 && player2X <= 440 && player2Y <= 250 && player2Y + 10 >= 250){
+			player2Y = 250;
+			}
+			else{
+				player2Y += 10;
+			}
 			if(changeDirection2 == true){
 				direction2 = 1;
 				changeDirection2 = false;
@@ -355,7 +389,12 @@ function draw() {
 			scale(0.5);
 			animation(player2_left_Ani, 0, 0);
 			pop();
-    	player2X -= 10;
+    	if(player2X >= 450 && player2X - 10 <= 450 && player2Y <= 650 && player2Y >= 250){
+			player2X = 450;
+			}
+			else{
+				player2X -= 10;
+			}
 			if(changeDirection2 == true){
 				direction2 = 2;
 				changeDirection2 = false;
@@ -367,7 +406,12 @@ function draw() {
 			scale(0.5);
 			animation(player2_right_Ani, 0, 0);
 			pop();
-    	player2X += 10;
+    	if(player2X <= 250 && player2X + 10 >= 250 && player2Y <= 630 && player2Y >= 270){
+			player2X = 250;
+			}
+			else{
+				player2X += 10;
+			}
 			if(changeDirection2 == true){
 				direction2 = 3;
 				changeDirection2 = false;
@@ -410,7 +454,6 @@ function draw() {
 			knifeY = -1000;
 			iceBreaking.play();
 		}
-
 		
 		}
 	else if(scene == 1){
