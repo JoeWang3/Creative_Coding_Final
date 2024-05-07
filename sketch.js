@@ -71,7 +71,7 @@ function setup() {
   player2X = 700;
   player2Y = 400;
 	
-	
+	//start button
   startButton = createButton('Start Game');
   startButton.position(760, 400);
  	startButton.mousePressed(startGame);
@@ -84,7 +84,8 @@ function setup() {
 	startButton.style('border-radius', '8px'); 
 	startButton.style('font-size', '20px'); 
 	startButton.style('font-weight', 'bold'); 
-
+	
+	// go back button
   backButton = createButton('Go Back');
   backButton.position(1000, 700);
   backButton.mousePressed(goBack);
@@ -98,6 +99,7 @@ function setup() {
 	backButton.style('font-size', '22px'); 
 	backButton.style('font-weight', 'bold'); 
 	
+	// load animation
 	knifeAni = loadAnimation("knife_1.png", "knife_2.png", "knife_3.png",); 
 	knifeAni.frameDelay = 5;
   player1_up_Ani = loadAnimation('melon_up_1.png','melon_up_2.png','melon_up_3.png');
@@ -123,13 +125,13 @@ function setup() {
 
 function draw() {
 	// console.log(scene)
-	if(scene == -1){
+	if(scene == -1){ // start page
 		clear();
 		startButton.show();
 		backButton.hide();
 		background(bgImage);
 	}
-	else if(scene == 0){
+	else if(scene == 0){ // main playing page
 		clear();
 		background(map_1);
 		startButton.hide();
@@ -217,7 +219,7 @@ function draw() {
 			image(left_arrow, player2X+50, player2Y-90);
 		}
 
-		
+		// draw the knife if the user launch the knife
 		if(ifKnifeAni == true){
 			push();
 			translate(knifeX, knifeY);
@@ -258,6 +260,7 @@ function draw() {
 			}
 		}
 		
+		// if knife out of border, kill the knife
 		if(knifeY <= 0 || knifeY >= 800 || knifeX <= 0 || knifeX >= 800){
 			ifKnifeAni = false;
 			changeDirection = true;
@@ -267,6 +270,7 @@ function draw() {
 			changeDirection2 = true;
 		}
 		
+		// let user control the character
     if (keys['e']) {
 			if(changeDirection == true){
 				knifeX = player1X;
@@ -435,6 +439,7 @@ function draw() {
 			pop();
 		}
 		
+		// check if the knife hit the user
 		if(checkCollision(knifeX, knifeY, player2X, player2Y) == true){
 			player2_blood -= 1;
 			changeDirection = true;
@@ -449,6 +454,8 @@ function draw() {
 			knife2X = -1000;
 			knife2Y = -1000;
 		}
+		
+		// check if the knife hit the ice
 		if(checkCollision2(knife2X-50, knife2Y-50,100, 100, 300, 300, 100, 300) == true ){
 			changeDirection2 = true;
 			ifKnifeAni2 = false;
@@ -466,13 +473,13 @@ function draw() {
 		}
 		
 		}
-	else if(scene == 1){
+	else if(scene == 1){ // player2 win page
 		clear();
 		background(player2_win); 
 		startButton.hide();
 		backButton.show();
 	}
-	else if(scene == 2){
+	else if(scene == 2){ // player1 win page
 		clear();
 		background(player1_win); 
 		startButton.hide();
