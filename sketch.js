@@ -1,5 +1,5 @@
 let startButton;
-let viewCharactersButton;
+let backButton;
 let scene = -1;
 let player1X, player1Y, player2X, player2Y;
 let keys = {};
@@ -66,22 +66,38 @@ function preload() {
 function setup() {
   createCanvas(800, 800);
   background(bgImage);
-	frogAngle = 0;
-  player1X = 200;
+  player1X = 100;
   player1Y = 400;
-  player2X = 600;
+  player2X = 700;
   player2Y = 400;
 	
 	
   startButton = createButton('Start Game');
   startButton.position(760, 400);
-  startButton.style('width', '200px'); 
+ 	startButton.mousePressed(startGame);
+	
+	startButton.style('width', '200px'); 
   startButton.style('height', '60px');
-  startButton.mousePressed(startGame);
+	startButton.style('background-color', 'deepskyblue'); 
+	startButton.style('color', 'greenyellow'); 
+	startButton.style('border', 'none'); 
+	startButton.style('border-radius', '8px'); 
+	startButton.style('font-size', '20px'); 
+	startButton.style('font-weight', 'bold'); 
 
-  viewCharactersButton = createButton('View Characters');
-  viewCharactersButton.position(1000, 700);
-  viewCharactersButton.mousePressed(viewCharacters);
+  backButton = createButton('Go Back');
+  backButton.position(1000, 700);
+  backButton.mousePressed(goBack);
+	
+	backButton.style('width', '200px'); 
+  backButton.style('height', '60px');
+	backButton.style('background-color', 'mediumspringgreen'); 
+	backButton.style('color', 'coral'); 
+	backButton.style('border', 'none'); 
+	backButton.style('border-radius', '8px'); 
+	backButton.style('font-size', '22px'); 
+	backButton.style('font-weight', 'bold'); 
+	
 	knifeAni = loadAnimation("knife_1.png", "knife_2.png", "knife_3.png",); 
 	knifeAni.frameDelay = 5;
   player1_up_Ani = loadAnimation('melon_up_1.png','melon_up_2.png','melon_up_3.png');
@@ -106,24 +122,22 @@ function setup() {
 }
 
 function draw() {
+	// console.log(scene)
 	if(scene == -1){
 		clear();
 		startButton.show();
-    viewCharactersButton.show();
+		backButton.hide();
 		background(bgImage);
 	}
 	else if(scene == 0){
 		clear();
 		background(map_1);
 		startButton.hide();
-    viewCharactersButton.hide();
-		
+		backButton.hide();
 		image(ice, 300,300);
 		image(ice, 300,400);
 		image(ice, 300,500);
 		
-		// image(ice, 500,100);
-		// image(ice, 500,200);
 		
 		// Disable the character from running out of the screen 
 		if(player1X <= 0){
@@ -150,10 +164,6 @@ function draw() {
 		if(player2Y >= 800){
 			player2Y = 800;
 		}
-		
-		// Diasble the character from crossing the ice
-		
-		
 		
 		
 		// draw the blood of the two players
@@ -460,13 +470,13 @@ function draw() {
 		clear();
 		background(player2_win); 
 		startButton.hide();
-    viewCharactersButton.hide();
+		backButton.show();
 	}
 	else if(scene == 2){
 		clear();
 		background(player1_win); 
 		startButton.hide();
-    viewCharactersButton.hide();
+		backButton.show();
 	}
 
 }
@@ -490,8 +500,20 @@ function startGame() {
 	scene = 0;
 }
 
-function viewCharacters() {
-  console.log("Viewing characters");
+function goBack() {
+  scene = -1;
+	player1_blood = 3;
+  player2_blood = 3;
+	player1X = 100;
+  player1Y = 400;
+  player2X = 700;
+  player2Y = 400;
+	knifeX = -1000;
+  knifeY = -1000;
+  knife2X = -1000;
+  knife2Y = -1000;
+  ifKnifeAni = false;
+  ifKnifeAni2 = false;
 }
 
 function checkCollision(knifeX, knifeY, player1X, player1Y) {
