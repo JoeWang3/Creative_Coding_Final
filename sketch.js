@@ -3,8 +3,7 @@ let backButton;
 let scene = -1;
 let player1X, player1Y, player2X, player2Y;
 let keys = {};
-let frogExist = true;
-let frog2Exist = true;
+let time = 0;
 let bgImage;
 let knifeImage, map_1, ice;
 let one_blood, two_blood, three_blood, player1_win, player2_win, left_arrow, right_arrow, up_arrow, down_arrow;
@@ -15,13 +14,18 @@ let knife2Y = -1000;
 let ifKnifeAni = false;
 let ifKnifeAni2 = false;
 let direction1, direction2;
-let player1_up_Ani, player1_down_Ani, player1_left_Ani, player1_right_Ani, player1_stay_Ani;
+let player1_up_Ani, player1_down_Ani, player1_left_Ani, player1_right_Ani, player1_stay_Ani, op_Ani;
 let player2_up_Ani, player2_down_Ani, player2_left_Ani, player2_right_Ani, player2_stay_Ani;
 let changeDirection = true;
 let changeDirection2 = true;
 let player1_blood = 3;
 let player2_blood = 3;
 let iceBreaking;
+let opX = -1000;
+let opY = -1000;
+let ifOp = false;
+let player2_prop = -1;
+let player1_prop = -1;
 
 function preload() {
 	iceBreaking = loadSound('iceBreaking.mp3');
@@ -121,6 +125,9 @@ function setup() {
   player2_left_Ani.frameDelay = 10;
 	player2_right_Ani = loadAnimation('banana_right_1.png','banana_right_2.png','banana_right_3.png');
   player2_right_Ani.frameDelay = 10;
+	
+	op_Ani = loadAnimation("op_1.png", "op_2.png", "op_3.png", "op_4.png", "op_5.png"); 
+	op_Ani.frameDelay = 15;
 }
 
 function draw() {
@@ -133,6 +140,7 @@ function draw() {
 	}
 	else if(scene == 0){ // main playing page
 		clear();
+		time += 0.01;
 		background(map_1);
 		startButton.hide();
 		backButton.hide();
@@ -140,6 +148,25 @@ function draw() {
 		image(ice, 300,400);
 		image(ice, 300,500);
 		
+		if(time == 6.009999999999916 && ifOp == false){
+			if (random(1) < 0.5) {
+    		opX = random(100, 201);
+  		} else {
+    		opX = random(400, 701);
+ 			}
+			opY = random(100, 700);
+			ifOp = true;
+		}
+		
+		// console.log(time);
+		
+		if(ifOp == true){
+			push();
+			translate(opX, opY);
+			scale(1.5);
+			animation(op_Ani, 0, 0);
+			pop();
+		}
 		
 		// Disable the character from running out of the screen 
 		if(player1X <= 0){
@@ -226,17 +253,22 @@ function draw() {
 			scale(0.3);
 			animation(knifeAni, 0, 0);
 			pop();
+			let s = 10;
+			
+			if(player1_prop == 0){
+				s = 30;
+			}
 			if(direction1 == 0){
-				knifeY -= 10;
+				knifeY -= s;
 			}
 			else if(direction1 == 1){
-				knifeY += 10;
+				knifeY += s;
 			}
 			else if(direction1 == 2){
-				knifeX -= 10;
+				knifeX -= s;
 			}
 			else{
-				knifeX += 10;
+				knifeX += s;
 			}
 		}
 		
@@ -246,17 +278,21 @@ function draw() {
 			scale(0.3);
 			animation(knifeAni, 0, 0);
 			pop();
+			let s = 10;
+			if(player2_prop == 0){
+				s = 20;
+			}
 			if(direction2 == 0){
-				knife2Y -= 10;
+				knife2Y -= s;
 			}
 			else if(direction2 == 1){
-				knife2Y += 10;
+				knife2Y += s;
 			}
 			else if(direction2 == 2){
-				knife2X -= 10;
+				knife2X -= s;
 			}
 			else{
-				knife2X += 10;
+				knife2X += s;
 			}
 		}
 		
@@ -264,10 +300,14 @@ function draw() {
 		if(knifeY <= 0 || knifeY >= 800 || knifeX <= 0 || knifeX >= 800){
 			ifKnifeAni = false;
 			changeDirection = true;
+			knifeX = -1000;
+			knifeY = -1000;
 		}
 		if(knife2Y <= 0 || knife2Y >= 800 || knife2X <= 0 || knife2X >= 800){
 			ifKnifeAni2 = false;
 			changeDirection2 = true;
+			knife2X = -1000;
+      knife2Y = -1000;
 		}
 		
 		// let user control the character
@@ -294,11 +334,15 @@ function draw() {
 			scale(0.4);
 			animation(player1_up_Ani, 0, 0);
 			pop();
-    	if(player1X >= 260 && player1X <= 440 && player1Y >= 650 && player1Y - 10 <= 650){
+			let s = 10;
+			if(player1_prop == 2){
+				s = 15;
+			}
+    	if(player1X >= 260 && player1X <= 440 && player1Y >= 650 && player1Y - s <= 650){
 			player1Y = 650;
 			}
 			else{
-				player1Y -= 10;
+				player1Y -= s;
 			}
 			if(changeDirection == true){
 				direction1 = 0;
@@ -311,11 +355,15 @@ function draw() {
 			scale(0.4);
 			animation(player1_down_Ani, 0, 0);
 			pop();
-			if(player1X >= 260 && player1X <= 440 && player1Y <= 250 && player1Y + 10 >= 250){
+			let s = 10;
+			if(player1_prop == 2){
+				s = 15;
+			}
+			if(player1X >= 260 && player1X <= 440 && player1Y <= 250 && player1Y + s >= 250){
 			player1Y = 250;
 			}
 			else{
-				player1Y += 10;
+				player1Y += s;
 			}
 			if(changeDirection == true){
 				direction1 = 1;
@@ -328,11 +376,15 @@ function draw() {
 			scale(0.4);
 			animation(player1_left_Ani, 0, 0);
 			pop();
-    	if(player1X >= 450 && player1X - 10 <= 450 && player1Y <= 650 && player1Y >= 250){
+			let s = 10;
+			if(player1_prop == 2){
+				s = 15;
+			}
+    	if(player1X >= 450 && player1X - s <= 450 && player1Y <= 650 && player1Y >= 250){
 			player1X = 450;
 			}
 			else{
-				player1X -= 10;
+				player1X -= s;
 			}
 			if(changeDirection == true){
 				direction1 = 2;
@@ -345,11 +397,15 @@ function draw() {
 			scale(0.4);
 			animation(player1_right_Ani, 0, 0);
 			pop();
-			if(player1X <= 250 && player1X + 10 >= 250 && player1Y <= 630 && player1Y >= 270){
+			let s = 10;
+			if(player1_prop == 2){
+				s = 15;
+			}
+			if(player1X <= 250 && player1X + s >= 250 && player1Y <= 630 && player1Y >= 270){
 			player1X = 250;
 			}
 			else{
-				player1X += 10;
+				player1X += s;
 			}
 			if(changeDirection == true){
 				direction1 = 3;
@@ -369,11 +425,15 @@ function draw() {
 			scale(0.5);
 			animation(player2_up_Ani, 0, 0);
 			pop();
-    	if(player2X >= 260 && player2X <= 440 && player2Y >= 650 && player2Y - 10 <= 650){
+			let s = 10;
+			if(player2_prop == 2){
+				s = 15;
+			}
+    	if(player2X >= 260 && player2X <= 440 && player2Y >= 650 && player2Y - s <= 650){
 			player2Y = 650;
 			}
 			else{
-				player2Y -= 10;
+				player2Y -= s;
 			}
 			if(changeDirection2 == true){
 				direction2 = 0;
@@ -386,11 +446,15 @@ function draw() {
 			scale(0.5);
 			animation(player2_down_Ani, 0, 0);
 			pop();
-    	if(player2X >= 260 && player2X <= 440 && player2Y <= 250 && player2Y + 10 >= 250){
+			let s = 10;
+			if(player2_prop == 2){
+				s = 15;
+			}
+    	if(player2X >= 260 && player2X <= 440 && player2Y <= 250 && player2Y + s >= 250){
 			player2Y = 250;
 			}
 			else{
-				player2Y += 10;
+				player2Y += s;
 			}
 			if(changeDirection2 == true){
 				direction2 = 1;
@@ -403,11 +467,15 @@ function draw() {
 			scale(0.5);
 			animation(player2_left_Ani, 0, 0);
 			pop();
-    	if(player2X >= 450 && player2X - 10 <= 450 && player2Y <= 650 && player2Y >= 250){
+			let s = 10;
+			if(player2_prop == 2){
+				s = 15;
+			}
+    	if(player2X >= 450 && player2X - s <= 450 && player2Y <= 650 && player2Y >= 250){
 			player2X = 450;
 			}
 			else{
-				player2X -= 10;
+				player2X -= s;
 			}
 			if(changeDirection2 == true){
 				direction2 = 2;
@@ -420,11 +488,15 @@ function draw() {
 			scale(0.5);
 			animation(player2_right_Ani, 0, 0);
 			pop();
-    	if(player2X <= 250 && player2X + 10 >= 250 && player2Y <= 630 && player2Y >= 270){
+			let s = 10;
+			if(player2_prop == 2){
+				s = 15;
+			}
+    	if(player2X <= 250 && player2X + s >= 250 && player2Y <= 630 && player2Y >= 270){
 			player2X = 250;
 			}
 			else{
-				player2X += 10;
+				player2X += s;
 			}
 			if(changeDirection2 == true){
 				direction2 = 3;
@@ -472,6 +544,34 @@ function draw() {
 			iceBreaking.play();
 		}
 		
+		if(checkCollision2(player1X-50, player1Y-50, 100, 100, opX - 40, opY - 40, 80, 80) == true ){
+			ifOp = false;
+			opX = -1000;
+			opY = -1000;
+			player1_prop = floor(random(0,3));
+			time = 0;
+		}
+		
+		if(checkCollision2(player2X-50, player2Y-50, 100, 100, opX - 40, opY - 40, 80, 80) == true ){
+			ifOp = false;
+			opX = -1000;
+			opY = -1000;
+			player2_prop = floor(random(0,3));
+			time = 0;
+		}
+		
+		if(player1_prop == 1){
+			if(player1_blood < 3){
+				player1_blood += 1;
+			}
+			player1_prop = -1;
+		}
+		if(player2_prop == 1){
+			if(player2_blood < 3){
+				player2_blood += 1;
+			}
+			player2_prop = -1;
+		}
 		}
 	else if(scene == 1){ // player2 win page
 		clear();
@@ -505,6 +605,7 @@ function keyReleased() {
 
 function startGame() {
 	scene = 0;
+	time = 0;
 }
 
 function goBack() {
