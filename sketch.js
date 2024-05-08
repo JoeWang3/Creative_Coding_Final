@@ -146,6 +146,15 @@ function setup() {
 	avo_show_Ani.frameDelay = 15;
 	avo_show_stay_Ani = loadAnimation('avo_show_2.png');
 	
+	ep_stay_Ani = loadAnimation('ep_down_1.png');
+	ep_up_Ani = loadAnimation('ep_up_1.png','ep_up_2.png','ep_up_3.png');
+  ep_up_Ani.frameDelay = 10;
+	ep_down_Ani = loadAnimation('ep_down_1.png','ep_down_2.png','ep_down_3.png');
+  ep_down_Ani.frameDelay = 10;
+	ep_left_Ani = loadAnimation('ep_left_1.png','ep_left_2.png');
+  ep_left_Ani.frameDelay = 10;
+	ep_right_Ani = loadAnimation('ep_right_1.png','ep_right_2.png','ep_right_3.png');
+  ep_right_Ani.frameDelay = 10;
 	ep_show_Ani = loadAnimation('ep_show_1.png','ep_show_2.png','ep_show_3.png', 'ep_show_2.png');
 	ep_show_Ani.frameDelay = 15;
 	ep_show_stay_Ani = loadAnimation('ep_show_2.png');
@@ -708,11 +717,11 @@ function keyPressed() {
 				player1_right_Ani = banana_right_Ani;
 			}
 			else if(user_choice == 3){
-				player1_up_Ani = banana_up_Ani;
-				player1_stay_Ani = banana_stay_Ani;
-				player1_down_Ani = banana_down_Ani;
-				player1_left_Ani = banana_left_Ani;
-				player1_right_Ani = banana_right_Ani;
+				player1_up_Ani = ep_up_Ani;
+				player1_stay_Ani = ep_stay_Ani;
+				player1_down_Ani = ep_down_Ani;
+				player1_left_Ani = ep_left_Ani;
+				player1_right_Ani = ep_right_Ani;
 			}
 			else{
 				player1_up_Ani = banana_up_Ani;
@@ -743,11 +752,11 @@ function keyPressed() {
 				player2_right_Ani = banana_right_Ani;
 			}
 			else if(user_choice == 3){
-				player2_up_Ani = banana_up_Ani;
-				player2_stay_Ani = banana_stay_Ani;
-				player2_down_Ani = banana_down_Ani;
-				player2_left_Ani = banana_left_Ani;
-				player2_right_Ani = banana_right_Ani;
+				player2_up_Ani = ep_up_Ani;
+				player2_stay_Ani = ep_stay_Ani;
+				player2_down_Ani = ep_down_Ani;
+				player2_left_Ani = ep_left_Ani;
+				player2_right_Ani = ep_right_Ani;
 			}
 			else{
 				player2_up_Ani = banana_up_Ani;
