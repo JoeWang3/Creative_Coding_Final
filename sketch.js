@@ -4,7 +4,7 @@ let scene = -1;
 let player1X, player1Y, player2X, player2Y;
 let keys = {};
 let time = 0;
-let bgImage;
+let bgImage, cc_bgImage;
 let knifeImage, map_1, ice;
 let one_blood, two_blood, three_blood, player1_win, player2_win, left_arrow, right_arrow, up_arrow, down_arrow;
 let knifeX = -1000;
@@ -16,6 +16,10 @@ let ifKnifeAni2 = false;
 let direction1, direction2;
 let player1_up_Ani, player1_down_Ani, player1_left_Ani, player1_right_Ani, player1_stay_Ani, op_Ani;
 let player2_up_Ani, player2_down_Ani, player2_left_Ani, player2_right_Ani, player2_stay_Ani;
+let melon_up_Ani, melon_down_Ani, melon_left_Ani, melon_right_Ani, melon_stay_Ani, melon_show_Ani, melon_show_stay_Ani;
+let banana_up_Ani, banana_down_Ani, banana_left_Ani, banana_right_Ani, banana_stay_Ani, banana_show_Ani, banana_show_stay_Ani;
+let avo_up_Ani, avo_down_Ani, avo_left_Ani, avo_right_Ani, avo_stay_Ani, avo_show_Ani, avo_show_stay_Ani;
+let ep_up_Ani, ep_down_Ani, ep_left_Ani, ep_right_Ani, ep_stay_Ani, ep_show_Ani, ep_show_stay_Ani;
 let changeDirection = true;
 let changeDirection2 = true;
 let player1_blood = 3;
@@ -26,6 +30,8 @@ let opY = -1000;
 let ifOp = false;
 let player2_prop = -1;
 let player1_prop = -1;
+let user_choice = 1;
+let enable_clicking = false;
 
 function preload() {
 	iceBreaking = loadSound('iceBreaking.mp3');
@@ -33,6 +39,9 @@ function preload() {
 			img.resize(200, 200);
 		}); 
 		bgImage = loadImage("homePage.png", img => {
+    img.resize(800, 800);
+  });
+	cc_bgImage = loadImage("cc_back.png", img => {
     img.resize(800, 800);
   });
 		one_blood = loadImage("one_blood.png", img => {
@@ -106,25 +115,40 @@ function setup() {
 	// load animation
 	knifeAni = loadAnimation("knife_1.png", "knife_2.png", "knife_3.png",); 
 	knifeAni.frameDelay = 5;
-  player1_up_Ani = loadAnimation('melon_up_1.png','melon_up_2.png','melon_up_3.png');
-  player1_up_Ani.frameDelay = 10;
-	player1_stay_Ani = loadAnimation('melon_stay.png');
-	player1_down_Ani = loadAnimation('melon_down_1.png','melon_down_2.png','melon_down_3.png');
-  player1_down_Ani.frameDelay = 10;
-	player1_left_Ani = loadAnimation('melon_left_1.png','melon_left_2.png');
-  player1_left_Ani.frameDelay = 10;
-	player1_right_Ani = loadAnimation('melon_right_1.png','melon_right_2.png','melon_right_3.png');
-  player1_right_Ani.frameDelay = 10;
 	
-	player2_stay_Ani = loadAnimation('banana_down_1.png');
-	player2_up_Ani = loadAnimation('banana_up_1.png','banana_up_2.png','banana_up_3.png');
-  player2_up_Ani.frameDelay = 10;
-	player2_down_Ani = loadAnimation('banana_down_1.png','banana_down_2.png','banana_down_3.png');
-  player2_down_Ani.frameDelay = 10;
-	player2_left_Ani = loadAnimation('banana_left_1.png','banana_left_2.png');
-  player2_left_Ani.frameDelay = 10;
-	player2_right_Ani = loadAnimation('banana_right_1.png','banana_right_2.png','banana_right_3.png');
-  player2_right_Ani.frameDelay = 10;
+  melon_up_Ani = loadAnimation('melon_up_1.png','melon_up_2.png','melon_up_3.png');
+  melon_up_Ani.frameDelay = 10;
+	melon_stay_Ani = loadAnimation('melon_stay.png');
+	melon_down_Ani = loadAnimation('melon_down_1.png','melon_down_2.png','melon_down_3.png');
+  melon_down_Ani.frameDelay = 10;
+	melon_left_Ani = loadAnimation('melon_left_1.png','melon_left_2.png');
+  melon_left_Ani.frameDelay = 10;
+	melon_right_Ani = loadAnimation('melon_right_1.png','melon_right_2.png','melon_right_3.png');
+  melon_right_Ani.frameDelay = 10;
+	melon_show_Ani = loadAnimation('melon_show_1.png','melon_show_2.png','melon_show_3.png', 'melon_show_4.png');
+	melon_show_Ani.frameDelay = 15;
+	melon_show_stay_Ani = loadAnimation('melon_show_2.png');
+	
+	banana_stay_Ani = loadAnimation('banana_down_1.png');
+	banana_up_Ani = loadAnimation('banana_up_1.png','banana_up_2.png','banana_up_3.png');
+  banana_up_Ani.frameDelay = 10;
+	banana_down_Ani = loadAnimation('banana_down_1.png','banana_down_2.png','banana_down_3.png');
+  banana_down_Ani.frameDelay = 10;
+	banana_left_Ani = loadAnimation('banana_left_1.png','banana_left_2.png');
+  banana_left_Ani.frameDelay = 10;
+	banana_right_Ani = loadAnimation('banana_right_1.png','banana_right_2.png','banana_right_3.png');
+  banana_right_Ani.frameDelay = 10;
+	banana_show_Ani = loadAnimation('banana_show_1.png','banana_show_2.png','banana_show_3.png', 'banana_show_2.png');
+	banana_show_Ani.frameDelay = 15;
+	banana_show_stay_Ani = loadAnimation('banana_show_2.png');
+	
+	avo_show_Ani = loadAnimation('avo_show_1.png','avo_show_2.png','avo_show_3.png', 'avo_show_2.png');
+	avo_show_Ani.frameDelay = 15;
+	avo_show_stay_Ani = loadAnimation('avo_show_2.png');
+	
+	ep_show_Ani = loadAnimation('ep_show_1.png','ep_show_2.png','ep_show_3.png', 'ep_show_2.png');
+	ep_show_Ani.frameDelay = 15;
+	ep_show_stay_Ani = loadAnimation('ep_show_2.png');
 	
 	op_Ani = loadAnimation("op_1.png", "op_2.png", "op_3.png", "op_4.png", "op_5.png"); 
 	op_Ani.frameDelay = 15;
@@ -137,6 +161,68 @@ function draw() {
 		startButton.show();
 		backButton.hide();
 		background(bgImage);
+	}
+	else if(scene == 3){
+		startButton.hide();
+		backButton.hide();
+		background(cc_bgImage);
+		textSize(40); 
+  	fill(0); 
+		textFont('Arial'); 
+		textStyle(NORMAL); 
+  	text('player1 choose character!', 180, 240); 
+		
+		if(user_choice == 1){
+				animation(melon_show_Ani, 100, 400);
+			}else{
+				animation(melon_show_stay_Ani, 100, 400);
+		}
+		if(user_choice == 2){
+				animation(banana_show_Ani, 300, 400);
+			}else{
+				animation(banana_show_stay_Ani, 300, 400);
+		}
+		if(user_choice == 3){
+				animation(ep_show_Ani,500, 400);
+			}else{
+				animation(ep_show_stay_Ani, 500, 400);
+		}
+		if(user_choice == 4){
+				animation(avo_show_Ani, 700, 400);
+			}else{
+				animation(avo_show_stay_Ani, 700, 400);
+		}
+	}
+	else if(scene == 4){
+		startButton.hide();
+		backButton.hide();
+		background(cc_bgImage);
+		textSize(40); 
+  	fill(255); 
+		textFont('Arial'); 
+		textStyle(NORMAL); 
+  	text('player2 choose character!', 180, 240); 
+		
+		if(user_choice == 1){
+				animation(melon_show_Ani, 100, 400);
+			}else{
+				animation(melon_show_stay_Ani, 100, 400);
+		}
+		if(user_choice == 2){
+				animation(banana_show_Ani, 300, 400);
+			}else{
+				animation(banana_show_stay_Ani, 300, 400);
+		}
+		if(user_choice == 3){
+				animation(ep_show_Ani,500, 400);
+			}else{
+				animation(ep_show_stay_Ani, 500, 400);
+		}
+		if(user_choice == 4){
+				animation(avo_show_Ani, 700, 400);
+			}else{
+				animation(avo_show_stay_Ani, 700, 400);
+		}
 	}
 	else if(scene == 0){ // main playing page
 		clear();
@@ -422,7 +508,7 @@ function draw() {
   	if (keys['ArrowUp']) {
     	push();
 			translate(player2X, player2Y);
-			scale(0.5);
+			scale(0.4);
 			animation(player2_up_Ani, 0, 0);
 			pop();
 			let s = 10;
@@ -443,7 +529,7 @@ function draw() {
   	else if (keys['ArrowDown']) {
     	push();
 			translate(player2X, player2Y);
-			scale(0.5);
+			scale(0.4);
 			animation(player2_down_Ani, 0, 0);
 			pop();
 			let s = 10;
@@ -464,7 +550,7 @@ function draw() {
   	else if (keys['ArrowLeft']) {
     	push();
 			translate(player2X, player2Y);
-			scale(0.5);
+			scale(0.4);
 			animation(player2_left_Ani, 0, 0);
 			pop();
 			let s = 10;
@@ -485,7 +571,7 @@ function draw() {
   	else if (keys['ArrowRight']) {
     	push();
 			translate(player2X, player2Y);
-			scale(0.5);
+			scale(0.4);
 			animation(player2_right_Ani, 0, 0);
 			pop();
 			let s = 10;
@@ -506,7 +592,7 @@ function draw() {
 		else{
 			push();
 			translate(player2X, player2Y);
-			scale(0.5);
+			scale(0.4);
 			animation(player2_stay_Ani, 0, 0);
 			pop();
 		}
@@ -593,6 +679,88 @@ function keyPressed() {
 	if (keyCode === SHIFT) {
     keys['SHIFT'] = true;
   }
+	if (keyCode === RIGHT_ARROW) {  
+    user_choice += 1;
+			if(user_choice > 4){
+				user_choice = 4;
+			}
+  }
+	if (keyCode === LEFT_ARROW) {  
+    user_choice -= 1;
+			if(user_choice < 1){
+				user_choice = 1;
+			}
+  }
+	if(scene == 3){
+		if (keyCode === ENTER) {  
+			if(user_choice == 1){
+				player1_up_Ani = melon_up_Ani;
+				player1_stay_Ani = melon_stay_Ani;
+				player1_down_Ani = melon_down_Ani;
+				player1_left_Ani = melon_left_Ani;
+				player1_right_Ani = melon_right_Ani;
+			}
+			else if(user_choice == 2){
+				player1_up_Ani = banana_up_Ani;
+				player1_stay_Ani = banana_stay_Ani;
+				player1_down_Ani = banana_down_Ani;
+				player1_left_Ani = banana_left_Ani;
+				player1_right_Ani = banana_right_Ani;
+			}
+			else if(user_choice == 3){
+				player1_up_Ani = banana_up_Ani;
+				player1_stay_Ani = banana_stay_Ani;
+				player1_down_Ani = banana_down_Ani;
+				player1_left_Ani = banana_left_Ani;
+				player1_right_Ani = banana_right_Ani;
+			}
+			else{
+				player1_up_Ani = banana_up_Ani;
+				player1_stay_Ani = banana_stay_Ani;
+				player1_down_Ani = banana_down_Ani;
+				player1_left_Ani = banana_left_Ani;
+				player1_right_Ani = banana_right_Ani;
+			}
+			scene = 4;
+			user_choice = 1;
+  }
+	}
+	if(scene == 4){
+		if(enable_clicking == true){
+		if (keyCode === ENTER) {  
+			if(user_choice == 1){
+				player2_up_Ani = melon_up_Ani;
+				player2_stay_Ani = melon_stay_Ani;
+				player2_down_Ani = melon_down_Ani;
+				player2_left_Ani = melon_left_Ani;
+				player2_right_Ani = melon_right_Ani;
+			}
+			else if(user_choice == 2){
+				player2_up_Ani = banana_up_Ani;
+				player2_stay_Ani = banana_stay_Ani;
+				player2_down_Ani = banana_down_Ani;
+				player2_left_Ani = banana_left_Ani;
+				player2_right_Ani = banana_right_Ani;
+			}
+			else if(user_choice == 3){
+				player2_up_Ani = banana_up_Ani;
+				player2_stay_Ani = banana_stay_Ani;
+				player2_down_Ani = banana_down_Ani;
+				player2_left_Ani = banana_left_Ani;
+				player2_right_Ani = banana_right_Ani;
+			}
+			else{
+				player2_up_Ani = banana_up_Ani;
+				player2_stay_Ani = banana_stay_Ani;
+				player2_down_Ani = banana_down_Ani;
+				player2_left_Ani = banana_left_Ani;
+				player2_right_Ani = banana_right_Ani;
+			}
+			scene = 0;
+  }
+			}
+	}
+	
 }
 
 function keyReleased() {
@@ -600,11 +768,17 @@ function keyReleased() {
 	if (keyCode === SHIFT) {
     keys['SHIFT'] = false;
   }
+	if(scene == 4){
+		if (keyCode === ENTER){
+			enable_clicking = true;
+		}
+	}
+	
 }
 
 
 function startGame() {
-	scene = 0;
+	scene = 3;
 	time = 0;
 }
 
@@ -622,6 +796,8 @@ function goBack() {
   knife2Y = -1000;
   ifKnifeAni = false;
   ifKnifeAni2 = false;
+	user_choice = 1;
+  enable_clicking = false;
 }
 
 function checkCollision(knifeX, knifeY, player1X, player1Y) {
@@ -645,11 +821,8 @@ function checkCollision(knifeX, knifeY, player1X, player1Y) {
 
 function checkCollision2(x1, y1, w1, h1, x2, y2, w2, h2) {
     if (x1 + w1 < x2) return false;
-
     if (x1 > x2 + w2) return false;
-
     if (y1 + h1 < y2) return false;
-
     if (y1 > y2 + h2) return false;
     return true;
 }
